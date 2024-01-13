@@ -4,11 +4,13 @@ import './App.css';
 // import Button from 'react-bootstrap/Button';
 import {Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Topbar from './components/topbar/topbar';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <Topbar>test</Topbar>{' '}
         <Button variant="primary">Primary</Button>{' '}
         
 
