@@ -1,1 +1,23 @@
-.Topbar {}
+.topbar-container {
+    width: 100%;
+    height: 6rem;
+
+    background-color: red;
+
+    padding: 20px;
+
+    text-align: left;
+}
+
+.topbar {
+    display: flex;
+    flex-direction: row;
+}
+
+.topbar-title {
+    margin-right: 25px;
+}
+
+.topbar-dropdown {
+    margin-top:5px;
+}
