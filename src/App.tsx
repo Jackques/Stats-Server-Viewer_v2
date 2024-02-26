@@ -9,6 +9,8 @@ import { getProfiles, getProjects } from './projectsService';
 function App() {
   const [projects, setProjects] = useState<string[]>([]);
   
+  // TODO: create a general object/class with all the projects, profiles, keys etc?
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
