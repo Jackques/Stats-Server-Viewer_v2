@@ -4,9 +4,10 @@ import './App.css';
 import {Col, Container, Row} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Topbar from './components/topbar/topbar';
-import { getProfiles, getProjects } from './projectsService';
+import { StatsServerHTTPService } from './services/statsServerHTTPService';
 
 function App() {
+  const statsServerHTTPService = new StatsServerHTTPService();
   const [projects, setProjects] = useState<string[]>([]);
   
   // TODO: create a general object/class with all the projects, profiles, keys etc?
@@ -14,13 +15,15 @@ function App() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const projects: string[] = await getProjects();
+        // const projects: string[] = await getProjects();
+        const projects: string[] = await statsServerHTTPService.getProjects();
         console.log(`app useEffect - fetchProjects`);
         console.dir(projects);
         
 
         const profilesPromises = projects.map(async (project) => {
-          const profile = await getProfiles(project);
+          // const profile = await getProfiles(project);
+          const profile: string[] = await statsServerHTTPService.getProfiles(project);
           return { project, profile };
         });
 
@@ -40,19 +43,19 @@ function App() {
     fetchProjects();
   }, []);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const projects: string[] = await getProjects();
-        console.log(`app useEffect - fetchProjects`);
-        console.dir(projects);
-        setProjects(projects);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchProjects = async () => {
+  //     try {
+  //       const projects: string[] = await statsServerHTTPService.getProjects();
+  //       console.log(`app useEffect - fetchProjects`);
+  //       console.dir(projects);
+  //       setProjects(projects);
+  //     } catch (error) {
+  //       console.error('Error fetching projects:', error);
+  //     }
+  //   };
 
-  }, projects);
+  // }, projects);
 
   const handleItemSelected = (selectedItem: string | null) => {
     console.log('Selected Item:', selectedItem);
