@@ -1,3 +1,4 @@
+import { ProjectKey } from "../interfaces/projectKey.interface";
 import { HttpService } from "./httpService";
 import { StatsServerHTTPMockData } from "./mockData";
 
@@ -7,7 +8,8 @@ export class StatsServerHTTPService {
   private readonly returnMockedData = {
     allRequests: false,
     getProjects: true, 
-    getProfiles: true
+    getProfiles: true,
+    getKeysProject: true,
   };
 
   public getProjects = async (): Promise<string[]> => {
@@ -28,6 +30,15 @@ export class StatsServerHTTPService {
     return profiles;
   };
 
+  public getKeysFromProject = async (projectname: string): Promise<ProjectKey[]> => {
+    if(this.returnMockedData.allRequests || this.returnMockedData.getKeysProject){
+      return this.returnMockData('getKeysFromProject') as ProjectKey[];
+    }
+
+    const keys = await this.httpService.sendRequest(`getKeysFromProject/${projectname}`) as ProjectKey[];
+    return keys;
+  };
+
   private returnMockData(methodName: string): unknown {
     switch (methodName) {
       case 'getProjects':
@@ -36,6 +47,9 @@ export class StatsServerHTTPService {
       case 'getProfiles':
           console.log(`%c Returning mocked data for ${methodName}`, `color: orange`);
           return StatsServerHTTPMockData.getProfiles();
+      case 'getKeysFromProject':
+          console.log(`%c Returning mocked data for ${methodName}`, `color: orange`);
+          return StatsServerHTTPMockData.getKeysFromProject();
       default:
         throw new Error(`Method name: ${methodName} not found for returning mocked data.`);
     }

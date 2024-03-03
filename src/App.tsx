@@ -5,6 +5,7 @@ import {Col, Container, Row} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Topbar from './components/topbar/topbar';
 import { StatsServerHTTPService } from './services/statsServerHTTPService';
+import { ProjectKey } from './interfaces/projectKey.interface';
 
 function App() {
   const statsServerHTTPService = new StatsServerHTTPService();
@@ -27,11 +28,18 @@ function App() {
           return { project, profile };
         });
 
+        const keysFromProjectPromises = projects.map(async (project) => {
+          const keys: ProjectKey[] = await statsServerHTTPService.getKeysFromProject(project);
+          return keys;
+        });
+
         // Wait for all profile requests to complete
       const profilesData = await Promise.all(profilesPromises);
+      const keysFromProjectData = await Promise.all(keysFromProjectPromises);
 
       // Now you have an array of { project, profile } objects
       console.log('Projects with Profiles:', profilesData);
+      console.log('Projects with Keys:', keysFromProjectData);
 
       setProjects(projects);
 
