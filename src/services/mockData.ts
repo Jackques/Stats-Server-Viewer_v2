@@ -570,5 +570,13 @@ export class StatsServerHTTPMockData {
             "keyName": "Date-liked-or-passed"
         }
     ];
-  }
+    }
+
+    public static getAllListValuesFromKey(){
+        return [
+            "waarde123",
+            "waarde456",
+            "waarde789"
+        ];
+    }
 }

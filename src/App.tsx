@@ -33,6 +33,8 @@ function App() {
           return keys;
         });
 
+        const listValues: string[] = await statsServerHTTPService.getAllListValuesFromKey('T-Helper', 'Vibe-tags');
+
         // Wait for all profile requests to complete
       const profilesData = await Promise.all(profilesPromises);
       const keysFromProjectData = await Promise.all(keysFromProjectPromises);
@@ -40,6 +42,8 @@ function App() {
       // Now you have an array of { project, profile } objects
       console.log('Projects with Profiles:', profilesData);
       console.log('Projects with Keys:', keysFromProjectData);
+
+      console.log('ListValues for T-Helper - Vibe-tags:', listValues);
 
       setProjects(projects);
 
