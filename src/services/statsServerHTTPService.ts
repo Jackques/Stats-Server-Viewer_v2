@@ -1,4 +1,7 @@
+import { Profile } from "../interfaces/profile.interface";
+import { Project } from "../interfaces/project.interface";
 import { ProjectKey } from "../interfaces/projectKey.interface";
+import { Query } from "../interfaces/query.interface";
 import { HttpService } from "./httpService";
 import { StatsServerHTTPMockData } from "./mockData";
 
@@ -11,6 +14,7 @@ export class StatsServerHTTPService {
     getProfiles: true,
     getKeysProject: true,
     getAllListValuesFromKey: false,
+    getAllQueriesFromProject: false,
   };
 
   public getProjects = async (): Promise<string[]> => {
@@ -22,12 +26,12 @@ export class StatsServerHTTPService {
     return projects;
   };
 
-  public getProfiles = async (projectname: string): Promise<string[]> => {
+  public getProfiles = async (projectname: string): Promise<Profile[]> => {
     if(this.returnMockedData.allRequests || this.returnMockedData.getProfiles){
-      return this.returnMockData('getProfiles') as string[];
+      return this.returnMockData('getProfiles') as Profile[];
     }
 
-    const profiles = await this.httpService.sendRequest(`getProfileNamesFromProject/${projectname}`) as string[];
+    const profiles = await this.httpService.sendRequest(`getProfileNamesFromProject/${projectname}`) as Profile[];
     return profiles;
   };
 
@@ -49,6 +53,15 @@ export class StatsServerHTTPService {
     return listValues;
   };
 
+  public getAllQueriesFromProject = async (projectname: string): Promise<Query[]> => {
+    if(this.returnMockedData.allRequests || this.returnMockedData.getAllQueriesFromProject){
+      return this.returnMockData('getAllQueriesFromProject') as Query[];
+    }
+
+    const queriesFromProject = await this.httpService.sendRequest(`getAllQueriesFromProject/${projectname}`) as Query[];
+    return queriesFromProject;
+  };
+
   private returnMockData(methodName: string): unknown {
     switch (methodName) {
       case 'getProjects':
@@ -63,6 +76,9 @@ export class StatsServerHTTPService {
       case 'getAllListValuesFromKey':
           console.log(`%c Returning mocked data for ${methodName}`, `color: orange`);
           return StatsServerHTTPMockData.getAllListValuesFromKey();
+      case 'getAllQueriesFromProject':
+          console.log(`%c Returning mocked data for ${methodName}`, `color: orange`);
+          return StatsServerHTTPMockData.getAllQueriesFromProject();
       default:
         throw new Error(`Method name: ${methodName} not found for returning mocked data.`);
     }

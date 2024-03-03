@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Topbar from './components/topbar/topbar';
 import { StatsServerHTTPService } from './services/statsServerHTTPService';
 import { ProjectKey } from './interfaces/projectKey.interface';
+import { Profile } from './interfaces/profile.interface';
+import { Query } from './interfaces/query.interface';
 
 function App() {
   const statsServerHTTPService = new StatsServerHTTPService();
@@ -24,7 +26,7 @@ function App() {
 
         const profilesPromises = projects.map(async (project) => {
           // const profile = await getProfiles(project);
-          const profile: string[] = await statsServerHTTPService.getProfiles(project);
+          const profile: Profile[] = await statsServerHTTPService.getProfiles(project);
           return { project, profile };
         });
 
@@ -34,16 +36,23 @@ function App() {
         });
 
         const listValues: string[] = await statsServerHTTPService.getAllListValuesFromKey('T-Helper', 'Vibe-tags');
+        
+        const queriesFromProjectPromises = projects.map(async (project) => {
+          const queryFromProject: Query[] = await statsServerHTTPService.getAllQueriesFromProject(project);
+          return queryFromProject;
+        });
 
         // Wait for all profile requests to complete
       const profilesData = await Promise.all(profilesPromises);
       const keysFromProjectData = await Promise.all(keysFromProjectPromises);
+      const queriesFromProjectData = await Promise.all(queriesFromProjectPromises);
 
       // Now you have an array of { project, profile } objects
       console.log('Projects with Profiles:', profilesData);
       console.log('Projects with Keys:', keysFromProjectData);
 
       console.log('ListValues for T-Helper - Vibe-tags:', listValues);
+      console.log('Projects with queries:', queriesFromProjectData);
 
       setProjects(projects);
 
