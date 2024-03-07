@@ -8,6 +8,7 @@ import { StatsServerHTTPService } from './services/statsServerHTTPService';
 import { ProjectKey } from './interfaces/projectKey.interface';
 import { Profile } from './interfaces/profile.interface';
 import { Query } from './interfaces/query.interface';
+import QuerySetList from './components/QuerySetList/QuerySetList';
 
 function App() {
   const statsServerHTTPService = new StatsServerHTTPService();
@@ -85,16 +86,16 @@ function App() {
 
   return (
     <div className="App">
-      <Container fluid className="vh-100 d-flex flex-column">
+      <Container fluid className="vh-100 min-vh-100 d-flex flex-column">
       <Row className="vh-20">
         <Col>
           <Topbar projectsList={projects} onItemSelected={handleItemSelected}></Topbar>
         </Col>
       </Row>
-      <Row className="vh-80">
+      <Row className="vh-80 flex-grow-1">
         <Col>
           <div style={{backgroundColor: "green", display: "inline-block", width: "100%", height: "100%"}}>
-            <p>side bar left</p>
+            <QuerySetList></QuerySetList>
           </div>
         </Col>
         
