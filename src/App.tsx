@@ -7,12 +7,14 @@ import Topbar from './components/topbar/topbar';
 import { StatsServerHTTPService } from './services/statsServerHTTPService';
 import { ProjectKey } from './interfaces/projectKey.interface';
 import { Profile } from './interfaces/profile.interface';
-import { Query } from './interfaces/query.interface';
+import { QuerySet } from './interfaces/querySet.interface';
 import QuerySetList from './components/QuerySetList/QuerySetList';
+import { Query } from './interfaces/query.interface';
 
 function App() {
   const statsServerHTTPService = new StatsServerHTTPService();
   const [projects, setProjects] = useState<string[]>([]);
+  const [querySets, setQuerySets] = useState<QuerySet[][]>([]);
   
   // TODO: create a general object/class with all the projects, profiles, keys etc?
 
@@ -39,7 +41,7 @@ function App() {
         const listValues: string[] = await statsServerHTTPService.getAllListValuesFromKey('T-Helper', 'Vibe-tags');
         
         const queriesFromProjectPromises = projects.map(async (project) => {
-          const queryFromProject: Query[] = await statsServerHTTPService.getAllQueriesFromProject(project);
+          const queryFromProject: QuerySet[] = await statsServerHTTPService.getAllQueriesFromProject(project);
           return queryFromProject;
         });
 
@@ -56,6 +58,7 @@ function App() {
       console.log('Projects with queries:', queriesFromProjectData);
 
       setProjects(projects);
+      setQuerySets(queriesFromProjectData);
 
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -84,6 +87,11 @@ function App() {
     // Handle the selected item in the parent component
   };
 
+  const handleQuerySelected = (selectedQuery: Query) => {
+    console.log('Selected Item (App):', selectedQuery);
+    // Handle the selected item in the parent component
+  };
+
   return (
     <div className="App">
       <Container fluid className="vh-100 min-vh-100 d-flex flex-column">
@@ -95,7 +103,7 @@ function App() {
       <Row className="vh-80 flex-grow-1">
         <Col>
           <div style={{backgroundColor: "green", display: "inline-block", width: "100%", height: "100%"}}>
-            <QuerySetList></QuerySetList>
+            <QuerySetList querySetList={querySets[1]} onQuerySelected={handleQuerySelected}></QuerySetList>
           </div>
         </Col>
         

@@ -1,6 +1,6 @@
 import { GraphType } from "./graphType.enum"
 import { Profile } from "./profile.interface"
-import { Query } from "./query.interface"
+import { QuerySet } from "./querySet.interface"
 import { QueryResult } from "./queryResult.interface"
 
 export interface Project {
@@ -17,5 +17,5 @@ export interface Project {
         affectedProfileNames: Profile[],
         graphType: GraphType.COLUMN_CHART
     },
-    queries: Query[]
+    queries: QuerySet[]
 }

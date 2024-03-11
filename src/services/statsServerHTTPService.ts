@@ -1,7 +1,7 @@
 import { Profile } from "../interfaces/profile.interface";
 import { Project } from "../interfaces/project.interface";
 import { ProjectKey } from "../interfaces/projectKey.interface";
-import { Query } from "../interfaces/query.interface";
+import { QuerySet } from "../interfaces/querySet.interface";
 import { HttpService } from "./httpService";
 import { StatsServerHTTPMockData } from "./mockData";
 
@@ -53,12 +53,12 @@ export class StatsServerHTTPService {
     return listValues;
   };
 
-  public getAllQueriesFromProject = async (projectname: string): Promise<Query[]> => {
+  public getAllQueriesFromProject = async (projectname: string): Promise<QuerySet[]> => {
     if(this.returnMockedData.allRequests || this.returnMockedData.getAllQueriesFromProject){
-      return this.returnMockData('getAllQueriesFromProject') as Query[];
+      return this.returnMockData('getAllQueriesFromProject') as QuerySet[];
     }
 
-    const queriesFromProject = await this.httpService.sendRequest(`getAllQueriesFromProject/${projectname}`) as Query[];
+    const queriesFromProject = await this.httpService.sendRequest(`getAllQueriesFromProject/${projectname}`) as QuerySet[];
     return queriesFromProject;
   };
 

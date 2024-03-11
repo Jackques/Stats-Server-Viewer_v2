@@ -5,7 +5,7 @@ import QuerySetList from './QuerySetList';
 
 describe('<QuerySetList />', () => {
   test('it should mount', () => {
-    render(<QuerySetList />);
+    render(<QuerySetList querySetList={[]} onQuerySelected={()=>{}} />);
     
     const querySetList = screen.getByTestId('QuerySetList');
 
