@@ -1,13 +1,13 @@
 import { Profile } from "./profile.interface";
-import { Query } from "./query.interface";
+import { QueryInterface } from "./query.interface";
 import { QueryResult } from "./queryResult.interface";
 
-export interface QuerySet {
+export interface QuerySetInterface {
     description: string,
     id: string,
     name: string,
     projectName: string,
-    queries: Query[],
+    queries: QueryInterface[],
     queryMetaData: {
         affectedProfileNames: Profile[],
         graphType: string

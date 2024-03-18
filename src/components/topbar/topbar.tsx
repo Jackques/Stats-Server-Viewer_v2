@@ -4,10 +4,11 @@ import { Dropdown } from 'react-bootstrap';
 
 interface TopbarProps {
   projectsList: string[],
+  projectListIsLoading: boolean,
   onItemSelected: (selectedItem: string) => void;
 }
 
-const Topbar: FC<TopbarProps> = ({projectsList, onItemSelected}) => {
+const Topbar: FC<TopbarProps> = ({projectsList, projectListIsLoading, onItemSelected}) => {
   const [projectOptions, setProjectOptions] = useState<string[]>([]);
   const [selectedItem, setSelectedItem] = useState<string>();
 

@@ -1,7 +1,7 @@
 import { Profile } from "../interfaces/profile.interface";
-import { Project } from "../interfaces/project.interface";
+import { ProjectInterface } from "../interfaces/project.interface";
 import { ProjectKey } from "../interfaces/projectKey.interface";
-import { QuerySet } from "../interfaces/querySet.interface";
+import { QuerySetInterface } from "../interfaces/querySet.interface";
 import { HttpService } from "./httpService";
 import { StatsServerHTTPMockData } from "./mockData";
 
@@ -53,12 +53,12 @@ export class StatsServerHTTPService {
     return listValues;
   };
 
-  public getAllQueriesFromProject = async (projectname: string): Promise<QuerySet[]> => {
+  public getAllQueriesFromProject = async (projectname: string): Promise<QuerySetInterface[]> => {
     if(this.returnMockedData.allRequests || this.returnMockedData.getAllQueriesFromProject){
-      return this.returnMockData('getAllQueriesFromProject') as QuerySet[];
+      return this.returnMockData('getAllQueriesFromProject') as QuerySetInterface[];
     }
 
-    const queriesFromProject = await this.httpService.sendRequest(`getAllQueriesFromProject/${projectname}`) as QuerySet[];
+    const queriesFromProject = await this.httpService.sendRequest(`getAllQueriesFromProject/${projectname}`) as QuerySetInterface[];
     return queriesFromProject;
   };
 

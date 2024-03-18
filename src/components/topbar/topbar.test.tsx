@@ -5,7 +5,7 @@ import Topbar from './topbar';
 
 describe('<Topbar />', () => {
   test('it should mount', () => {
-    render(<Topbar projectsList={["project1", "project2"]} onItemSelected={()=>{}}/>);
+    render(<Topbar projectsList={["project1", "project2"]} onItemSelected={() => { } } projectListIsLoading={false}/>);
     
     const topbar = screen.getByTestId('Topbar');
 

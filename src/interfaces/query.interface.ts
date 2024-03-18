@@ -1,6 +1,6 @@
 import { Profile } from "./profile.interface";
 
-export interface Query {
+export interface QueryInterface {
     amount: string,
     fromDate: string,
     toDate: string,
