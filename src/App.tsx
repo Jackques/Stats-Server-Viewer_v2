@@ -28,8 +28,6 @@ function App() {
   // TODO: create a general object/class with all the projects, profiles, keys etc?
 
   useEffect(() => {
-    // const projectService: ProjectService = new ProjectService();
-    // projectService = new ProjectService();
     projectService.getProjectIsLoaded().then((isLoading: boolean)=>{
       setIsLoadingState(isLoading);
       setProjectsNames(projectService.getProjectNames());
