@@ -9,6 +9,7 @@ import { QuerySet } from './domains/querySet';
 import { Project } from './domains/project';
 import { ProjectService } from './services/projectService';
 import { Query } from './domains/query';
+import QueryViewer from './components/QueryViewer/QueryViewer';
 
 function App() {
   const [projectIsLoadingState, setIsLoadingState] = useState<boolean>(false);
@@ -17,6 +18,8 @@ function App() {
   const [querySets, setQuerySets] = useState<QuerySet[]>([]);
 
   const [projectsClasses, setProjectsClasses] = useState<Project[]>([]);
+  const [selectedQuery, setSelectedQuery] = useState<Query>();
+
   let projectService: ProjectService = new ProjectService()
 
   if (process.env.NODE_ENV === 'development') {
@@ -107,6 +110,7 @@ function App() {
 
   const handleQuerySelected = (selectedQuery: Query) => {
     console.log('Selected Item (App):', selectedQuery);
+    setSelectedQuery(selectedQuery);
     // Handle the selected item in the parent component
 
     console.dir(projectsClasses);
@@ -130,7 +134,8 @@ function App() {
           <Col>
             {/* center left */}
             <div style={{ backgroundColor: "yellow", display: "inline-block", width: "100%", height: "100%" }}>
-              <p>center</p>
+              <QueryViewer query={selectedQuery}></QueryViewer>
+              {/* <p>center</p> */}
             </div>
           </Col>
 
