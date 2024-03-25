@@ -110,7 +110,7 @@ export class Project {
                 reject(false);
             }
             querySets.forEach(querySet => {
-                this.querySets.push(new QuerySet(querySet));
+                this.querySets.push(new QuerySet(this.projectName, querySet));
             });
             resolve(true);
         });

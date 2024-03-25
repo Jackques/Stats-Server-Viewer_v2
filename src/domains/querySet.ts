@@ -3,12 +3,19 @@ import { QuerySetInterface } from "../interfaces/querySet.interface";
 import { Query } from "./query";
 
 export class QuerySet {
+    private projectName: string;
     private querySet: QuerySetInterface;
     private queries: Query[];
 
-    constructor(querySet: QuerySetInterface){
+    constructor(projectName: string, querySet: QuerySetInterface){
+        this.projectName = projectName;
         this.querySet = querySet;
-        this.queries = querySet.queries.map(query => new Query(query));
+        this.queries = querySet.queries.map(query => new Query(this.projectName, querySet.id, query));
+
+        //todo: should really refactor that the queryId is part of the query object in querySet.query and not querySet.querySetResults
+        querySet.querySetResults.queryResults.forEach((queryResult: { id: string, labelForThisQuery: string, totalResults: number }, index: number)=>{
+            this.queries[index].setQueryId(queryResult.id);
+        });
     }
 
     public getQuerySet(): QuerySetInterface {

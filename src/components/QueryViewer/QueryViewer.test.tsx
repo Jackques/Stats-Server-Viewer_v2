@@ -18,7 +18,7 @@ describe('<QueryViewer />', () => {
       returnFields: [],
       queryParameters: []
     };
-    const query = new Query(queryData);
+    const query = new Query('T-Helper', 'querySetId123', queryData);
     render(<QueryViewer query={query} />);
     
     const queryViewer = screen.getByTestId('QueryViewer');

@@ -51,55 +51,6 @@ function App() {
     console.log(`QuerySets: ${querySets}`);
   }, [projects]);
 
-  // const fetchProjects = async () => {
-  //   try {
-  // const projects: string[] = await getProjects();
-
-
-
-  //   const profilesPromises = projects.map(async (project) => {
-  //     // const profile = await getProfiles(project);
-  //     const profile: Profile[] = await statsServerHTTPService.getProfiles(project);
-  //     return { project, profile };
-  //   });
-
-  //   const keysFromProjectPromises = projects.map(async (project) => {
-  //     const keys: ProjectKey[] = await statsServerHTTPService.getKeysFromProject(project);
-  //     return keys;
-  //   });
-
-  //   const listValues: string[] = await statsServerHTTPService.getAllListValuesFromKey('T-Helper', 'Vibe-tags');
-
-  //   const queriesFromProjectPromises = projects.map(async (project) => {
-  //     const queryFromProject: QuerySetInterface[] = await statsServerHTTPService.getAllQueriesFromProject(project);
-  //     return queryFromProject;
-  //   });
-
-  //   // Wait for all profile requests to complete
-  // const profilesData = await Promise.all(profilesPromises);
-  // const keysFromProjectData = await Promise.all(keysFromProjectPromises);
-  // const queriesFromProjectData = await Promise.all(queriesFromProjectPromises);
-
-  // // Now you have an array of { project, profile } objects
-  // console.log('Projects with Profiles:', profilesData);
-  // console.log('Projects with Keys:', keysFromProjectData);
-
-  // console.log('ListValues for T-Helper - Vibe-tags:', listValues);
-  // console.log('Projects with queries:', queriesFromProjectData);
-
-  // setProjects(projects); // todo: this can be removed?
-
-  // queriesFromProjectData.forEach((querySetProject: QuerySetInterface[])=>{
-  //   // const querySets: any[] = queriesFromProjectData.map((query: QuerySetInterface[]) => new QuerySet(query));
-  // });
-
-  // setQuerySets(queriesFromProjectData);
-
-  //   } catch (error) {
-  //     console.error('Error fetching projects:', error);
-  //   }
-  // };
-
   console.log(`execute app.tsx`);
   // fetchProjects();
 
@@ -110,6 +61,7 @@ function App() {
 
   const handleQuerySelected = (selectedQuery: Query) => {
     console.log('Selected Item (App):', selectedQuery);
+    
     setSelectedQuery(selectedQuery);
     // Handle the selected item in the parent component
 
@@ -135,7 +87,6 @@ function App() {
             {/* center left */}
             <div style={{ backgroundColor: "yellow", display: "inline-block", width: "100%", height: "100%" }}>
               <QueryViewer query={selectedQuery}></QueryViewer>
-              {/* <p>center</p> */}
             </div>
           </Col>
 
