@@ -1,4 +1,4 @@
 export interface QueryDetails {
-    id: string,
-    // todo: fill in other fields
+    queryResultId: string,
+    queryResultsList: unknown[]
 }

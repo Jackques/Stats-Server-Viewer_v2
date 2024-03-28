@@ -4,6 +4,7 @@ import { Query } from '../../domains/query';
 import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { fakerEN as faker } from '@faker-js/faker';
+import { Spinner } from 'react-bootstrap';
 
 interface QueryViewerProps {
   query: Query | undefined;
@@ -11,43 +12,27 @@ interface QueryViewerProps {
 
 const QueryViewer: FC<QueryViewerProps> = ({ query }) => {
   const [selectedQuery, setSelectedQuery] = useState<Query>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // setSelectedQuery(query);
 
   useEffect(() => {
     if (query) {
-      console.log(`QUERYVIEWER - query`);
+      setIsLoading(true);
       setSelectedQuery(query);
-
-      // const fetchData = async () => {
-      //   console.log(`testdata`);
-      //   const result = await selectedQuery?.getQueryDetailsIsLoaded().then((isSuccess: boolean)=>{
-      //     console.log(`SelectedQuery succesfully loaded details: ${isSuccess}`);
-      //   });
-   
-      //   // setData(result.data);
-        
-      // };
-      // fetchData();
       getSelectedQueryDetails(query);
     }
   }, [query]);
 
   useEffect(() => {
-    console.log(` QUERYVIEWER - set selected query`);
-
-    console.log(`MY SELECTED QUERY IS:`);
-    console.dir(selectedQuery);
-    // if(selectedQuery){
-    //   console.log(`QUERYVIEWER - setSelectedQuery`);
-    //   getSelectedQueryDetails();
-    // }
   }, [selectedQuery]);
 
   async function getSelectedQueryDetails(query: Query): Promise<void> {
-    console.log(`async getSelectedQueryDetails called`);
-    await query.getQueryDetailsIsLoaded().then((isSuccess: boolean)=>{
-      console.log(`SelectedQuery succesfully loaded details: ${isSuccess}`);
+    await query.getQueryDetailsIsLoaded().then((isSuccess: boolean) => {
+      setIsLoading(false);
+      console.log(isLoading);
+
+      //todo: what if request was unsuccefull? isSuccess = false???
     });
   }
 
@@ -87,22 +72,32 @@ const QueryViewer: FC<QueryViewerProps> = ({ query }) => {
   };
 
   if (query) {
-    return (
-      <div>
-        <div className="QueryViewer" data-testid="QueryViewer">
-          <h2>{selectedQuery?.getQueryLabel() ? selectedQuery?.getQueryLabel() : 'Unavailable query name'}</h2>
-          <p>{selectedQuery?.getQueryColor() ? selectedQuery?.getQueryColor() : 'No color set'}</p>
-          <pre>
-            <span>{selectedQuery?.getQueryFromDate() ? selectedQuery.getQueryFromDate() : ' - '}</span>
-            <span>-</span>
-            <span>{selectedQuery?.getQueryToDate() ? selectedQuery.getQueryToDate() : ' - '}</span>
-          </pre>
-          <div style={{ margin: "20px" }}>
-            <Bar options={options} data={data} />
-          </div>
+
+    if (isLoading) {
+      return (
+        <div>
+          <Spinner animation="border" variant="primary" />
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          <div className="QueryViewer" data-testid="QueryViewer">
+            <h2>{selectedQuery?.getQueryLabel() ? selectedQuery?.getQueryLabel() : 'Unavailable query name'}</h2>
+            <p>{selectedQuery?.getQueryColor() ? selectedQuery?.getQueryColor() : 'No color set'}</p>
+            <pre>
+              <span>{selectedQuery?.getQueryFromDate() ? selectedQuery.getQueryFromDate() : ' - '}</span>
+              <span>-</span>
+              <span>{selectedQuery?.getQueryToDate() ? selectedQuery.getQueryToDate() : ' - '}</span>
+            </pre>
+            <div style={{ margin: "20px" }}>
+              <Bar options={options} data={data} />
+            </div>
+          </div>
+
+        </div>
+      );
+    }
   } else {
     return (
       <div>

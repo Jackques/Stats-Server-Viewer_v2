@@ -16,6 +16,7 @@ export class StatsServerHTTPService {
     getKeysProject: true,
     getAllListValuesFromKey: false,
     getAllQueriesFromProject: false,
+    getQueryDetails: true,
   };
 
   public getProjects = async (): Promise<string[]> => {
@@ -23,7 +24,7 @@ export class StatsServerHTTPService {
       return this.returnMockData('getProjects') as string[];
     }
 
-    const projects = await this.httpService.sendRequest('getProjects') as string[];
+    const projects = await this.httpService.sendGetRequest('getProjects') as string[];
     return projects;
   };
 
@@ -32,7 +33,7 @@ export class StatsServerHTTPService {
       return this.returnMockData('getProfiles') as Profile[];
     }
 
-    const profiles = await this.httpService.sendRequest(`getProfileNamesFromProject/${projectname}`) as Profile[];
+    const profiles = await this.httpService.sendGetRequest(`getProfileNamesFromProject/${projectname}`) as Profile[];
     return profiles;
   };
 
@@ -41,7 +42,7 @@ export class StatsServerHTTPService {
       return this.returnMockData('getKeysFromProject') as ProjectKey[];
     }
 
-    const keys = await this.httpService.sendRequest(`getKeysFromProject/${projectname}`) as ProjectKey[];
+    const keys = await this.httpService.sendGetRequest(`getKeysFromProject/${projectname}`) as ProjectKey[];
     return keys;
   };
 
@@ -50,7 +51,7 @@ export class StatsServerHTTPService {
       return this.returnMockData('getAllListValuesFromKey') as string[];
     }
 
-    const listValues = await this.httpService.sendRequest(`getAllListValuesFromKeyInProject/${projectname}/${keyName}`) as string[];
+    const listValues = await this.httpService.sendGetRequest(`getAllListValuesFromKeyInProject/${projectname}/${keyName}`) as string[];
     return listValues;
   };
 
@@ -59,19 +60,17 @@ export class StatsServerHTTPService {
       return this.returnMockData('getAllQueriesFromProject') as QuerySetInterface[];
     }
 
-    const queriesFromProject = await this.httpService.sendRequest(`getAllQueriesFromProject/${projectname}`) as QuerySetInterface[];
+    const queriesFromProject = await this.httpService.sendGetRequest(`getAllQueriesFromProject/${projectname}`) as QuerySetInterface[];
     return queriesFromProject;
   };
 
-  public getAllQueryDetails = async (projectName: string, querySetId: string, queryId: string): Promise<QueryDetails[]> => {
+  public getQueryDetails = async (projectName: string, querySetId: string, queryId: string): Promise<QueryDetails> => {
+    if(this.returnMockedData.allRequests || this.returnMockedData.getQueryDetails){
+      return this.returnMockData('getQueryDetails') as QueryDetails;
+    }
 
-    // TODO: Reformat so this CAN return dummy data (after getting some actual data first)
-    // if(this.returnMockedData.allRequests || this.returnMockedData.getAllQueriesFromProject){
-    //   return this.returnMockData('getAllQueriesFromProject') as QuerySetInterface[];
-    // }
-
-    const queryDetails = await this.httpService.sendRequest(`getQuery/${projectName}/${querySetId}/detailResults`) as QueryDetails[];
-    return queryDetails;
+    const queryDetails = await this.httpService.sendGetRequest(`getQuery/${projectName}/${querySetId}/detailResults/${queryId}`) as QueryDetails[];
+    return queryDetails[0];
   }
 
   private returnMockData(methodName: string): unknown {
@@ -91,6 +90,9 @@ export class StatsServerHTTPService {
       case 'getAllQueriesFromProject':
           console.log(`%c Returning mocked data for ${methodName}`, `color: orange`);
           return StatsServerHTTPMockData.getAllQueriesFromProject();
+      case 'getQueryDetails':
+          console.log(`%c Returning mocked data for ${methodName}`, `color: orange`);
+          return StatsServerHTTPMockData.getQueryDetails();
       default:
         throw new Error(`Method name: ${methodName} not found for returning mocked data.`);
     }

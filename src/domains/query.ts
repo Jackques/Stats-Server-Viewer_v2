@@ -8,7 +8,7 @@ export class Query {
     private query: QueryInterface;
     private queryId: string | null = null;
     private isLoadedQuery: Promise<boolean> | undefined = undefined;
-    private queryDetails: QueryDetails[] = [];
+    private queryDetails: QueryDetails | undefined = undefined;
 
     private statsServerHTTPService: StatsServerHTTPService = new StatsServerHTTPService();
 
@@ -50,13 +50,10 @@ export class Query {
     }
 
     public getQueryDetailsIsLoaded(): Promise<boolean> {
-        console.log(`getQueryDetailsIsLoaded called`);
-        debugger;
         return new Promise((resolve, reject)=>{
             if(!this.isLoadedQuery){
                 this.isLoadedQuery = this.loadQueryDetails();
                 this.isLoadedQuery.then((isSucces: boolean)=>{
-                    console.log(`ISLOADQUERYDETAILS SUCCESS?: ${isSucces}`);
                     isSucces ? resolve(true) : reject(false);
                 });
                 return;
@@ -65,17 +62,20 @@ export class Query {
         });
     }
 
+    public getQueryDetails(): QueryDetails | undefined {
+        return this.queryDetails;
+    }
+
     private loadQueryDetails(): Promise<boolean> {
         return new Promise(async (resolve, reject)=>{
-            let queryDetails: QueryDetails[] = [];
+            let queryDetailsResult: QueryDetails | undefined = undefined;
+
             try{
-                queryDetails = await this.statsServerHTTPService.getAllQueryDetails(this.projectName, this.getQuerySetId(), this.getQueryId());
+                queryDetailsResult = await this.statsServerHTTPService.getQueryDetails(this.projectName, this.getQuerySetId(), this.getQueryId());
             }catch(e){
                 reject(false);
             }
-            queryDetails.forEach(queryDetail => {
-                this.queryDetails.push(queryDetail);
-            });
+            this.queryDetails = queryDetailsResult;
             resolve(true);
         });
     }

@@ -1,15 +1,14 @@
 export class HttpService {
     private BASE_URL = 'http://localhost:8080/api/v1';
 
-    public sendRequest = async (subUrl: string, method: string = 'GET'): Promise<unknown> => {
+    public sendGetRequest = async (subUrl: string): Promise<unknown> => {
+        const methodType = 'GET';
+
         const options: RequestInit = {
-          method,
+          method: methodType,
           headers: {
             'Content-Type': 'application/json',
             // You can add additional headers here
-          },
-          body: {
-
           }
         };
       
