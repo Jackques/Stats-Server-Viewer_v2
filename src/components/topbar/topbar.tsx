@@ -21,7 +21,7 @@ const Topbar: FC<TopbarProps> = ({projectsList, projectListIsLoading, onItemSele
       setSelectedItem(projectsList[0]);
       onItemSelected(projectsList[0]);
     }
-  }, [onItemSelected, projectsList]);
+  }, [projectsList]);
 
 
   const handleSelect = (eventKey: string | null) => {

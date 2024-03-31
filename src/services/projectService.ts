@@ -4,6 +4,7 @@ import { StatsServerHTTPService } from './statsServerHTTPService';
 
 export class ProjectService {
     private statsServerHTTPService = new StatsServerHTTPService();
+    private isProjectsLoaded = false;
 
     private projects: Project[] = [];
     private projectsIsLoaded: Promise<boolean> = new Promise(async (resolve, reject)=>{
@@ -22,6 +23,7 @@ export class ProjectService {
             this.projects.push(new Project(project));
 
             if(projects.length === (index+1)){
+                this.isProjectsLoaded = true;
                 resolve(true);
             }
         });
@@ -31,8 +33,12 @@ export class ProjectService {
         console.log(`setProjects`);
     }
 
-    public getProjectIsLoaded(): Promise<boolean> {
+    public loadProjects(): Promise<boolean> {
         return this.projectsIsLoaded;
+    }
+
+    public hasProjectsLoaded(): boolean {
+        return this.isProjectsLoaded;
     }
 
     public getProjectNames(): string[] {
@@ -46,5 +52,13 @@ export class ProjectService {
     public getQuerySets(): QuerySet[] {
         //TODO: Only getting the querySets of the first project for now..
         return this.projects[0].getQuerySets();
+    }
+
+    public getFirstProject(): Project {
+        return this.projects[0];
+    }
+
+    public getProjectByProjectName(projectName: string): Project | undefined {
+        return this.projects.find(project => project.getProjectName() === projectName);
     }
 }
