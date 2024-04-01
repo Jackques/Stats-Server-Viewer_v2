@@ -16,7 +16,7 @@ export class StatsServerHTTPService {
     getKeysProject: true,
     getAllListValuesFromKey: false,
     getAllQueriesFromProject: false,
-    getQueryDetails: true,
+    getQueryDetails: false,
   };
 
   public getProjects = async (): Promise<string[]> => {

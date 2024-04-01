@@ -5,35 +5,49 @@ import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarEleme
 import { Bar } from "react-chartjs-2";
 import { fakerEN as faker } from '@faker-js/faker';
 import { Spinner } from 'react-bootstrap';
+import { SelectedQuery } from '../../domains/selectedQuery';
 
 interface QueryViewerProps {
-  query: Query | undefined;
+  selectedQuery: SelectedQuery | undefined;
 }
 
-const QueryViewer: FC<QueryViewerProps> = ({ query }) => {
-  const [selectedQuery, setSelectedQuery] = useState<Query>();
+const QueryViewer: FC<QueryViewerProps> = ({ selectedQuery: SelectedQuery }) => {
+  const [selectedQuery, setSelectedQuery] = useState<SelectedQuery>();
+  const [query, setQuery] = useState<Query | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // setSelectedQuery(query);
 
   useEffect(() => {
-    if (query) {
+    if (selectedQuery) {
       setIsLoading(true);
-      setSelectedQuery(query);
-      getSelectedQueryDetails(query);
+      setSelectedQuery(selectedQuery);
+
+      debugger;
+
+      getSelectedQueryDetails(selectedQuery);
     }
-  }, [query]);
+  }, [selectedQuery]);
 
   useEffect(() => {
   }, [selectedQuery]);
 
-  async function getSelectedQueryDetails(query: Query): Promise<void> {
-    await query.getQueryDetailsIsLoaded().then((isSuccess: boolean) => {
-      setIsLoading(false);
-      console.log(isLoading);
+  async function getSelectedQueryDetails(selectedQuery: SelectedQuery): Promise<void> {
+    const querySet = selectedQuery.getQuerySet();
+    const query = selectedQuery.getQuery();
+    if(query){
 
-      //todo: what if request was unsuccefull? isSuccess = false???
-    });
+      //TODO: Shouldn't i move the part below to QuerySetList component? That is WHERE I expect the queries to be loaded.. how else would I be able to click on them if they're not loaded?
+      // also; it is NOT the responsibility of this viewing component to get the query!
+      await query.getQueryDetailsIsLoaded().then((isSuccess: boolean) => {
+        setIsLoading(false);
+        console.log(isLoading);
+
+        setQuery(query);
+  
+        //todo: what if request was unsuccefull? isSuccess = false???
+      });
+    }
   }
 
   ChartJS.register(
@@ -83,12 +97,12 @@ const QueryViewer: FC<QueryViewerProps> = ({ query }) => {
       return (
         <div>
           <div className="QueryViewer" data-testid="QueryViewer">
-            <h2>{selectedQuery?.getQueryLabel() ? selectedQuery?.getQueryLabel() : 'Unavailable query name'}</h2>
-            <p>{selectedQuery?.getQueryColor() ? selectedQuery?.getQueryColor() : 'No color set'}</p>
+            <h2>{query?.getQueryLabel() ? query?.getQueryLabel() : 'Unavailable query name'}</h2>
+            <p>{query?.getQueryColor() ? query?.getQueryColor() : 'No color set'}</p>
             <pre>
-              <span>{selectedQuery?.getQueryFromDate() ? selectedQuery.getQueryFromDate() : ' - '}</span>
+              <span>{query?.getQueryFromDate() ? query.getQueryFromDate() : ' - '}</span>
               <span>-</span>
-              <span>{selectedQuery?.getQueryToDate() ? selectedQuery.getQueryToDate() : ' - '}</span>
+              <span>{query?.getQueryToDate() ? query.getQueryToDate() : ' - '}</span>
             </pre>
             <div style={{ margin: "20px" }}>
               <Bar options={options} data={data} />

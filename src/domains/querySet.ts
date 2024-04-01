@@ -33,4 +33,9 @@ export class QuerySet {
     public getQueries(): Query[] {
         return this.queries;
     }
+
+    public isQueryPartOfQuerySet(selectedQuery: Query): boolean {
+        const index = this.queries.findIndex((query: Query) => query.getQueryLabel() === selectedQuery.getQueryLabel());
+        return index === -1 ? false : true;
+    }
 }

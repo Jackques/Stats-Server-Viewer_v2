@@ -10,6 +10,7 @@ import { Project } from './domains/project';
 import { ProjectService } from './services/projectService';
 import { Query } from './domains/query';
 import QueryViewer from './components/QueryViewer/QueryViewer';
+import { SelectedQuery } from './domains/selectedQuery';
 
 function App() {
   const [projectIsLoadingState, setIsLoadingState] = useState<boolean>(false);
@@ -18,7 +19,7 @@ function App() {
   const [querySets, setQuerySets] = useState<QuerySet[]>([]);
 
   const [projectsClasses, setProjectsClasses] = useState<Project[]>([]);
-  const [selectedQuery, setSelectedQuery] = useState<Query>();
+  const [selectedQuery, setSelectedQuery] = useState<SelectedQuery>();
 
   const [hasAllQueriesAllProjectsLoaded, setAllQueriesAllProjectsLoaded] = useState<boolean>(false);
 
@@ -96,7 +97,7 @@ function App() {
     console.error(`selectProject is null`);
   };
 
-  const handleQuerySelected = (selectedQuery: Query) => {
+  const handleQuerySelected = (selectedQuery: SelectedQuery) => {
     console.log('Selected Item (App):', selectedQuery);
 
     setSelectedQuery(selectedQuery);
@@ -123,7 +124,7 @@ function App() {
           <Col>
             {/* center left */}
             <div style={{ backgroundColor: "yellow", display: "inline-block", width: "100%", height: "100%" }}>
-              <QueryViewer query={selectedQuery}></QueryViewer>
+              <QueryViewer selectedQuery={selectedQuery}></QueryViewer>
             </div>
           </Col>
 

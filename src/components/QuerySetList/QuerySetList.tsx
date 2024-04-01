@@ -4,14 +4,16 @@ import Accordion from 'react-bootstrap/esm/Accordion';
 import Button from 'react-bootstrap/esm/Button';
 import { QuerySet } from '../../domains/querySet';
 import { Query } from '../../domains/query';
+import { SelectedQuery } from '../../domains/selectedQuery';
 
 interface QuerySetListProps {
   querySetList: QuerySet[],
-  onQuerySelected: (selectedQuery: Query) => void;
+  onQuerySelected: (selectedQuery: SelectedQuery) => void;
 }
 
 const QuerySetList: FC<QuerySetListProps> = ({ querySetList, onQuerySelected }) => {
   const [querySets, setQuerySets] = useState<QuerySet[]>([]);
+  const [selectedQuery, setSelectedQuery] = useState<SelectedQuery | null>(null);
 
   useEffect(() => {
     console.log(`useEffect querySetList: ${querySetList.length}`);
@@ -20,10 +22,19 @@ const QuerySetList: FC<QuerySetListProps> = ({ querySetList, onQuerySelected }) 
     // }
   }, [onQuerySelected, querySetList]);
 
-  const selectQuery = (query: Query) => {
+  const selectQuerySet = (querySet: QuerySet) => {
+    console.log(`Selected query: ${querySet.getQuerySetName()}`);
+
+    setSelectedQuery(new SelectedQuery(querySet));
+  }
+
+  const selectQuery = (querySet: QuerySet, query: Query) => {
     console.log(`Selected query: ${query.getQueryLabel()}`);
 
-    onQuerySelected(query);
+    const selectedQuery = new SelectedQuery(querySet);
+    selectedQuery.setSelectedQuery(query);
+
+    onQuerySelected(selectedQuery);
   }
 
   const duplicateQuery = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, query: Query) => {
@@ -54,7 +65,7 @@ const QuerySetList: FC<QuerySetListProps> = ({ querySetList, onQuerySelected }) 
       {
         // todo: add loader
         querySets.length > 0 ? querySetList.map((querySet: QuerySet, index) =>
-        <Accordion key={index} flush>
+        <Accordion key={index} flush onClick={() => selectQuerySet(querySet)}>
           <Accordion.Item eventKey="0">
           <Accordion.Header>
             {querySet.getQuerySet().name}
@@ -64,7 +75,7 @@ const QuerySetList: FC<QuerySetListProps> = ({ querySetList, onQuerySelected }) 
             {
               querySet.getQueries().length > 0 ? querySet.getQueries().map((query: Query, index)=>
               <div className="query" key={index} style={{ backgroundColor: query.getQueryColor() }}>
-                <div className="queryContent" onClick={() => selectQuery(query)}>
+                <div className="queryContent" onClick={() => selectQuery(querySet, query)}>
                   <div className='queryContentTitle'>
                     <p>{query.getQueryLabel()}</p>
                   </div>
