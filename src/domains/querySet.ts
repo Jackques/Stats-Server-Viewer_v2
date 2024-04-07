@@ -1,3 +1,5 @@
+import { GraphType } from "../interfaces/graphType.enum";
+import { Profile } from "../interfaces/profile.interface";
 import { QueryInterface } from "../interfaces/query.interface";
 import { QuerySetInterface } from "../interfaces/querySet.interface";
 import { Query } from "./query";
@@ -32,6 +34,16 @@ export class QuerySet {
 
     public getQueries(): Query[] {
         return this.queries;
+    }
+
+    public getQueryMetaData(): {
+        affectedProfileNames: Profile[], 
+        graphType: GraphType
+    }{
+        return {
+            affectedProfileNames: this.getQuerySet().queryMetaData.affectedProfileNames,
+            graphType: this.getQuerySet().queryMetaData.graphType
+        }
     }
 
     public isQueryPartOfQuerySet(selectedQuery: Query): boolean {

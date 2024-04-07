@@ -1,3 +1,4 @@
+import { GraphType } from "./graphType.enum";
 import { Profile } from "./profile.interface";
 import { QueryInterface } from "./query.interface";
 import { QueryResult } from "./queryResult.interface";
@@ -10,7 +11,7 @@ export interface QuerySetInterface {
     queries: QueryInterface[],
     queryMetaData: {
         affectedProfileNames: Profile[],
-        graphType: string
+        graphType: GraphType
     },
     querySetResults: {
         amountOfQueries: number,

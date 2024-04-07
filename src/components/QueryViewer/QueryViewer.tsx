@@ -11,25 +11,28 @@ interface QueryViewerProps {
   selectedQuery: SelectedQuery | undefined;
 }
 
-const QueryViewer: FC<QueryViewerProps> = ({ selectedQuery: SelectedQuery }) => {
-  const [selectedQuery, setSelectedQuery] = useState<SelectedQuery>();
+const QueryViewer: FC<QueryViewerProps> = ({ selectedQuery }) => {
+  const [selectedQueryView, setSelectedQuery] = useState<SelectedQuery>();
   const [query, setQuery] = useState<Query | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // setSelectedQuery(query);
-
   useEffect(() => {
+    console.log(`%c 1. set selected query: ${selectedQuery}`, `color: red`);
     if (selectedQuery) {
       setIsLoading(true);
       setSelectedQuery(selectedQuery);
-
-      debugger;
+      console.log(`%c 3. set selected query: ${selectedQuery}`, `color: red`);
 
       getSelectedQueryDetails(selectedQuery);
     }
   }, [selectedQuery]);
 
   useEffect(() => {
+    console.log(`%c 2. set selected query: ${selectedQuery}`, `color: red`);
+    console.dir(selectedQuery);
+
+    console.log(`%c GRAPH DATA`, `color: purple`);
+    console.dir(selectedQuery?.getGraphData());
   }, [selectedQuery]);
 
   async function getSelectedQueryDetails(selectedQuery: SelectedQuery): Promise<void> {
@@ -41,7 +44,7 @@ const QueryViewer: FC<QueryViewerProps> = ({ selectedQuery: SelectedQuery }) => 
       // also; it is NOT the responsibility of this viewing component to get the query!
       await query.getQueryDetailsIsLoaded().then((isSuccess: boolean) => {
         setIsLoading(false);
-        console.log(isLoading);
+        console.log(`isLoading: `, isLoading);
 
         setQuery(query);
   

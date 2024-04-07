@@ -1,4 +1,4 @@
 export interface QueryDetails {
     queryResultId: string,
-    queryResultsList: unknown[]
+    queryResultsList: Record<string, unknown>[]
 }

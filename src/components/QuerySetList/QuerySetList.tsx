@@ -32,9 +32,13 @@ const QuerySetList: FC<QuerySetListProps> = ({ querySetList, onQuerySelected }) 
     console.log(`Selected query: ${query.getQueryLabel()}`);
 
     const selectedQuery = new SelectedQuery(querySet);
-    selectedQuery.setSelectedQuery(query);
+    selectedQuery.setSelectedQuery(query).then((result)=>{
+      if(result){
+        onQuerySelected(selectedQuery);
+      }
+    });
 
-    onQuerySelected(selectedQuery);
+    
   }
 
   const duplicateQuery = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, query: Query) => {
