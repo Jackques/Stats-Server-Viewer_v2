@@ -1,5 +1,6 @@
 import { GraphDataSet } from "../interfaces/graphDataSet.interface";
 import { GraphType } from "../interfaces/graphType.enum";
+import { NumberService } from "../services/numberService";
 import { QuerySet } from "./querySet";
 
 export class GraphData {
@@ -75,11 +76,8 @@ export class GraphData {
     }
     
     private setGraphDataLineGraph(querySet: QuerySet, graphLabels: string[]): GraphDataSet[] {
-        //TODO: Get y-axis from returnFields value (gewicht OR spiermassa OR vetpercentage etc. for fitness)
+        //TODO TODO TODO: I have hardcoded getting the date field (x-axis), the field i want to display on a line (y-axis) and additional fields (additional y-axis line) and additional points on the x-axis (notes), but i really should set this in the querySet!
         const graphDataSets: GraphDataSet[] = [];
-        // graphLabels.forEach((graphLabel)=>{
-            // debugger;
-
             querySet.getQueries().forEach((query) => {
                 const graphDataSet: GraphDataSet = {
                     data: [],
@@ -88,17 +86,14 @@ export class GraphData {
                     borderWidth: 1,
                     tooltipText: '',
                 };
-                debugger;
+                
                 query.getQueryDetails()?.queryResultsList.forEach((queryDetail) => {
-                    debugger;
                     const date = queryDetail['Datum'] as string;
-                    graphDataSet.data?.push(graphLabels.includes(date) ? Number(queryDetail['Gewicht in kg']) : 0);
+                    graphDataSet.data?.push(graphLabels.includes(date) ? NumberService.convertStringToNumberDecimals(queryDetail['Gewicht in kg'] as string) : 0);
                     graphDataSet.tooltipText = String(queryDetail['Notities']);
                 });
                 graphDataSets.push(graphDataSet);
             });
-
-        // });
         return graphDataSets;
     }
 
